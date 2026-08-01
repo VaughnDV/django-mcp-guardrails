@@ -1,0 +1,28 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 26.3.1
+    hooks:
+      - id: black
+        exclude: \.git|\.venv|venv|migrations
+        language_version: python3.11
+
+  - repo: https://github.com/pycqa/isort
+    rev: 8.0.1
+    hooks:
+      - id: isort
+        exclude: \.git|\.venv|venv|migrations
+        language_version: python3.11
+        args: ["--profile", "black", "-m", "3", "--tc", "-w", "120"]
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.3.0
+    hooks:
+      - id: flake8
+        exclude: \.git|\.venv|venv|migrations
+        language_version: python3.11
+        additional_dependencies:
+          - flake8-print
+        args: ["--max-line-length=120",
+               "--max-complexity=18",
+               "--exclude=.venv,venv",
+               "--extend-ignore=E203,E266,E501,W605"]

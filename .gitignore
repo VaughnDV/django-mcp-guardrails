@@ -1,0 +1,82 @@
+# Local kickstarts, scratch work, and generated reports
+/.tmp/
+/tmp/
+*.tmp
+*.temp
+/reports/
+/audit-exports/
+
+# Python bytecode and environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+ENV/
+__pypackages__/
+
+# Packaging artifacts
+/build/
+/dist/
+/.eggs/
+*.egg-info/
+*.egg
+.installed.cfg
+
+# Test, coverage, lint, and type-check caches
+.pytest_cache/
+.hypothesis/
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.mypy_cache/
+.pyright/
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Django runtime data
+*.log
+db.sqlite3
+db.sqlite3-journal
+*.sqlite3
+/media/
+/staticfiles/
+
+# Documentation
+/site/
+/docs/_build/
+
+# Secrets and local environment
+.env
+*.env
+!.env.example
+.envrc
+.direnv/
+local.env
+*.pem
+*.key
+*.p12
+/.secrets/
+/secrets/
+/credentials/
+
+# Editors: commit Cursor rules, ignore other local Cursor state
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
+.idea/
+.vscode/
+*.swp
+*~
+
+# OS files
+.DS_Store
+.AppleDouble
+Thumbs.db
+Desktop.ini
