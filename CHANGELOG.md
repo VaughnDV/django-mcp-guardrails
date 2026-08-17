@@ -15,4 +15,7 @@ release has been published.
 - Installable `django-mcp-guardrails` package scaffold with a Django `AppConfig`.
 - Poetry 2 packaging, an in-project virtual environment, pytest, Ruff, mypy, and pre-commit.
 - Optional extras for `django-mcp-server`, the official MCP Python SDK, and audit support.
-- GitHub Actions CI for lint, type checking, tests across supported Python/Django versions, and package builds.
+- Framework-neutral deny-by-default read policies, query validation, output
+  allowlisting, result envelopes, and stable error codes.
+- `guarded_tool` decorator and in-memory policy registry.
+- Policy reference and error-code documentation.

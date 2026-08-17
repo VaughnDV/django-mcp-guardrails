@@ -6,15 +6,17 @@ This directory will hold the policy reference, adapter support matrix, threat mo
 
 ## Current status
 
-- Packaging, tests, and CI are in place.
-- Policy core, Django QuerySet integration, MCP adapters, budgets, and audit logging are not implemented yet.
+- Framework-neutral read policy core, query validation, and output sanitization
+  are implemented.
+- Django QuerySet integration, MCP adapters, budgets, and audit logging are not
+  implemented yet.
 
-## Intended topics
+## Topics
 
-| Document | Milestone |
+| Document | Status |
 | --- | --- |
-| Policy reference | 1–2 |
-| Adapter support matrix | 3 |
-| Stable error codes | 1 |
-| Threat model and residual risks | 4 |
-| Example application walkthrough | 2–3 |
+| [Policy reference](policy-reference.md) | Milestone 1 |
+| [Stable error codes](error-codes.md) | Milestone 1 |
+| Adapter support matrix | Milestone 3 |
+| Threat model and residual risks | Milestone 4 |
+| Example application walkthrough | Milestone 2–3 |

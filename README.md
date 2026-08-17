@@ -14,7 +14,9 @@ Django permissions + scoped QuerySets
 sanitized, bounded, typed tool result
 ```
 
-Status: **alpha scaffold**. Policy APIs, adapters, budgets, and audit logging are specified in [`PROJECT_SPEC.md`](PROJECT_SPEC.md) and are not implemented yet.
+Status: **alpha**. The framework-neutral read policy core is implemented.
+Django QuerySet execution, MCP adapters, cumulative budgets, and audit
+logging are not implemented yet.
 
 ## Requirements
 
@@ -44,6 +46,35 @@ INSTALLED_APPS = [
 ]
 ```
 
+## Guard a read tool
+
+```python
+from django_mcp_guardrails import ModelReadPolicy, PolicyContext, guarded_tool
+
+policy = ModelReadPolicy(
+    model="Sponsor",
+    return_fields={"id", "name", "industry"},
+    filter_fields={"name", "industry", "status"},
+    ordering_fields={"name"},
+    default_limit=25,
+    max_limit=100,
+)
+
+@guarded_tool(policy=policy, risk="read")
+def search_sponsors(context: PolicyContext, query):
+    # Return already-serialized mappings. QuerySets are rejected.
+    return [{"id": 1, "name": "Acme", "password": "stripped"}]
+
+result = search_sponsors(
+    PolicyContext.authenticated("user-1"),
+    {"filters": {"name": "Acme"}, "limit": 10},
+)
+```
+
+Missing policies fail closed. Empty allowlists grant nothing. Client-supplied
+identity keys are ignored as untrusted and rejected. See
+[docs/policy-reference.md](docs/policy-reference.md).
+
 ## Development
 
 This repository uses [Poetry](https://python-poetry.org/) for dependencies and [uv](https://docs.astral.sh/uv/) to create the in-project `.venv`.
@@ -69,6 +100,8 @@ Write tools stay disabled or experimental until the specification promotes them.
 
 ## Documentation
 
+- [Policy reference](docs/policy-reference.md)
+- [Stable error codes](docs/error-codes.md)
 - [Project specification](PROJECT_SPEC.md)
 - [Contributor guide](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)

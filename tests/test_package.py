@@ -10,6 +10,7 @@ from django.apps import apps
 from django.core.management import call_command
 
 import django_mcp_guardrails
+from django_mcp_guardrails.registry import get_registry
 
 
 def test_version_matches_package_metadata() -> None:
@@ -18,8 +19,16 @@ def test_version_matches_package_metadata() -> None:
     )
 
 
-def test_public_package_exports_only_version() -> None:
-    assert django_mcp_guardrails.__all__ == ["__version__"]
+def test_public_package_exports_core_api() -> None:
+    assert "__version__" in django_mcp_guardrails.__all__
+    assert "ModelReadPolicy" in django_mcp_guardrails.__all__
+    assert "guarded_tool" in django_mcp_guardrails.__all__
+    assert "validate_query" in django_mcp_guardrails.__all__
+    assert "sanitize_output" in django_mcp_guardrails.__all__
+
+
+def test_import_does_not_register_policies() -> None:
+    assert len(get_registry()) == 0
 
 
 def test_core_does_not_import_optional_frameworks() -> None:
