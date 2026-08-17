@@ -16,8 +16,8 @@ sanitized, bounded, typed tool result
 
 Status: **alpha**. Deny-by-default read policies, Django QuerySet integration,
 the django-mcp-server adapter, cumulative export budgets, and privacy-safe
-audit metadata are implemented. Publishing to PyPI still requires a dedicated
-GitHub Release; see [docs/release.md](docs/release.md).
+audit metadata are implemented. A PyPI release is coming soon; until then,
+install from this repository.
 
 ## Requirements
 
@@ -26,16 +26,19 @@ GitHub Release; see [docs/release.md](docs/release.md).
 
 ## Installation
 
+PyPI is not live yet. A first release is coming soon. Until then, install from
+source:
+
 ```bash
-pip install django-mcp-guardrails
+pip install "django-mcp-guardrails @ git+https://github.com/VaughnDV/django-mcp-guardrails.git"
 ```
 
 Optional extras:
 
 ```bash
-pip install "django-mcp-guardrails[django-mcp-server]"
-pip install "django-mcp-guardrails[mcp-sdk]"
-pip install "django-mcp-guardrails[audit]"
+pip install "django-mcp-guardrails[django-mcp-server] @ git+https://github.com/VaughnDV/django-mcp-guardrails.git"
+pip install "django-mcp-guardrails[mcp-sdk] @ git+https://github.com/VaughnDV/django-mcp-guardrails.git"
+pip install "django-mcp-guardrails[audit] @ git+https://github.com/VaughnDV/django-mcp-guardrails.git"
 ```
 
 The `audit` extra currently adds no extra dependencies. The optional

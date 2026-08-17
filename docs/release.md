@@ -1,5 +1,7 @@
 # Release publishing
 
+The package is **not on PyPI yet**. A first upload is coming soon.
+
 This repository is prepared for PyPI Trusted Publishing. A coding agent must
 not tag, publish, change package visibility, or upload artifacts unless a
 maintainer explicitly asks.

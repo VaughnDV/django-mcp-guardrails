@@ -10,10 +10,10 @@ apply in the policy core used by this adapter.
 
 ## django-mcp-server
 
-Install:
+Install from this repository until the PyPI release is available:
 
 ```bash
-pip install "django-mcp-guardrails[django-mcp-server]"
+pip install "django-mcp-guardrails[django-mcp-server] @ git+https://github.com/VaughnDV/django-mcp-guardrails.git"
 ```
 
 Register a policy-backed tool. Identity comes from `django_request_ctx`, never from tool arguments:

@@ -6,8 +6,8 @@ The published contract lives in this directory: policy reference, adapter suppor
 
 Read policies, trusted Django request context, scoped QuerySets, the
 django-mcp-server adapter, cumulative export budgets, and privacy-safe audit
-metadata are implemented. The repository is release-ready; publishing still
-requires a dedicated release PR, GitHub Release, and Trusted Publishing.
+metadata are implemented. A PyPI release is coming soon. Until then, install
+from the GitHub repository; see the README.
 
 ## Topics
 
