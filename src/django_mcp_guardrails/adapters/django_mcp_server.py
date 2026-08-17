@@ -75,7 +75,7 @@ def _import_django_mcp() -> tuple[Any, Any]:
 
     warning_cls: type[Warning]
     try:
-        from pydantic_settings.exceptions import IncompleteFieldDefinitionWarning
+        from pydantic_settings.exceptions import IncompleteFieldDefinitionWarning  # type: ignore[import-not-found]
 
         warning_cls = IncompleteFieldDefinitionWarning
     except ImportError:  # pragma: no cover
