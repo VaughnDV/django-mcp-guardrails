@@ -10,6 +10,11 @@ release has been published.
 
 ## [Unreleased]
 
+### Changed
+
+- Rewrote the README with status badges, a visual pipeline, and a shorter
+  install-to-policy quick start.
+
 ### Added
 
 - Installable `django-mcp-guardrails` package scaffold with a Django `AppConfig`.
