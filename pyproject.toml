@@ -1,0 +1,151 @@
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "django-mcp-guardrails"
+version = "0.1.0"
+description = "Deny-by-default policy and output protection for Django applications that expose Model Context Protocol tools."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    { name = "VaughnDV", email = "vaughndevilliers@gmail.com" },
+]
+requires-python = ">=3.11"
+keywords = [
+    "django",
+    "mcp",
+    "model-context-protocol",
+    "guardrails",
+    "security",
+    "policy",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 5.2",
+    "Framework :: Django :: 6.0",
+    "Framework :: Django :: 6.1",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Security",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+dependencies = [
+    "django (>=5.2,<6.2)",
+]
+
+[project.optional-dependencies]
+django-mcp-server = [
+    "django-mcp-server (>=0.5.7)",
+]
+mcp-sdk = [
+    "mcp (>=1.0)",
+]
+audit = []
+
+[project.urls]
+Homepage = "https://github.com/VaughnDV/django-mcp-guardrails"
+Repository = "https://github.com/VaughnDV/django-mcp-guardrails"
+Issues = "https://github.com/VaughnDV/django-mcp-guardrails/issues"
+Changelog = "https://github.com/VaughnDV/django-mcp-guardrails/blob/main/CHANGELOG.md"
+Documentation = "https://github.com/VaughnDV/django-mcp-guardrails/blob/main/docs/README.md"
+
+[tool.poetry]
+packages = [
+    { include = "django_mcp_guardrails", from = "src" },
+]
+
+[tool.poetry.group.dev.dependencies]
+django-stubs = { version = ">=5.2", extras = ["compatible-mypy"] }
+mypy = ">=1.13"
+pre-commit = ">=4.0"
+pytest = ">=8.3"
+pytest-cov = ">=6.0"
+pytest-django = ">=4.10"
+python-dotenv = ">=1.0"
+ruff = ">=0.16"
+twine = ">=6.0"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+src = ["src", "tests", "example_project"]
+exclude = [
+    ".git",
+    ".venv",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    "build",
+    "dist",
+]
+
+[tool.ruff.lint]
+select = [
+    "B",
+    "E",
+    "F",
+    "I",
+    "RUF",
+    "SIM",
+    "UP",
+]
+ignore = [
+    "E501",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["RUF012"]
+"example_project/**/*.py" = ["RUF012"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+pythonpath = ["src", "."]
+testpaths = ["tests"]
+addopts = [
+    "--strict-config",
+    "--strict-markers",
+    "--cov=django_mcp_guardrails",
+    "--cov-report=term-missing",
+]
+filterwarnings = [
+    "error",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["django_mcp_guardrails"]
+omit = ["*/migrations/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 80
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["django_mcp_guardrails"]
+mypy_path = "src"
+explicit_package_bases = true
+plugins = ["mypy_django_plugin.main"]
+warn_unused_ignores = true
+show_error_codes = true
+
+[tool.django-stubs]
+django_settings_module = "tests.settings"

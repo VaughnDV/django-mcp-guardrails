@@ -1,28 +1,27 @@
 repos:
-  - repo: https://github.com/psf/black
-    rev: 26.3.1
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
     hooks:
-      - id: black
-        exclude: \.git|\.venv|venv|migrations
-        language_version: python3.11
+      - id: trailing-whitespace
+        exclude: '\.md$'
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+      - id: detect-private-key
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
 
-  - repo: https://github.com/pycqa/isort
-    rev: 8.0.1
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.3
     hooks:
-      - id: isort
-        exclude: \.git|\.venv|venv|migrations
-        language_version: python3.11
-        args: ["--profile", "black", "-m", "3", "--tc", "-w", "120"]
+      - id: ruff-check
+        args: ["--fix"]
+      - id: ruff-format
 
-  - repo: https://github.com/PyCQA/flake8
-    rev: 7.3.0
+  - repo: https://github.com/python-poetry/poetry
+    rev: 2.4.1
     hooks:
-      - id: flake8
-        exclude: \.git|\.venv|venv|migrations
-        language_version: python3.11
-        additional_dependencies:
-          - flake8-print
-        args: ["--max-line-length=120",
-               "--max-complexity=18",
-               "--exclude=.venv,venv",
-               "--extend-ignore=E203,E266,E501,W605"]
+      - id: poetry-check
+      - id: poetry-lock
