@@ -62,7 +62,9 @@ def guarded_tool(
                     return fetch_serialized_rows(policy, trusted_context, normalized)
                 return fn(trusted_context, normalized, *args, **kwargs)
 
-            return run_guarded_read(policy, context, query, producer)
+            return run_guarded_read(
+                policy, context, query, producer, tool_name=tool_name
+            )
 
         wrapper.guardrail_policy = policy  # type: ignore[attr-defined]
         wrapper.guardrail_name = tool_name  # type: ignore[attr-defined]

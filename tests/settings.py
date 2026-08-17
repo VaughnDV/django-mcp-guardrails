@@ -26,3 +26,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 ROOT_URLCONF = "tests.urls"
 
 MIDDLEWARE: list[str] = []
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "django-mcp-guardrails-tests",
+    }
+}

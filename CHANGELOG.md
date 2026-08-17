@@ -19,6 +19,14 @@ release has been published.
   allowlisting, result envelopes, and stable error codes.
 - `guarded_tool` decorator and in-memory policy registry.
 - Django QuerySet integration with trusted `PolicyContext.from_request`,
-  tenant-scoped querysets, object-permission callbacks, system checks, and
+  tenant-scoped querysets, object-permission callbacks, and system checks.
 - django-mcp-server adapter that translates framework request context into
   the policy core, plus a reusable adapter contract suite.
+- Cumulative export budgets keyed by trusted identity, client, tool, and
+  filter digest, with in-memory and Django cache backends.
+- Privacy-safe audit protocol and optional `AuditEvent` model that records
+  decisions and sizes, not prompts, results, or secrets.
+- `mcp_guardrails_simulate` and `mcp_guardrails_check --baseline` for review
+  and incremental adoption.
+- Threat model, release documentation, and Trusted Publishing workflows that
+  publish only from a GitHub Release.

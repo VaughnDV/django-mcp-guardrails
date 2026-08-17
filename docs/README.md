@@ -2,20 +2,20 @@
 
 The version 0.1 product contract lives in [`PROJECT_SPEC.md`](../PROJECT_SPEC.md). Treat that document as the source of truth for policy semantics, adapters, query vocabulary, audit behavior, and public APIs.
 
-This directory will hold the policy reference, adapter support matrix, threat model, and stable error-code catalog as those features are implemented.
-
 ## Current status
 
-- Framework-neutral read policy core, trusted Django request context, scoped
-  QuerySet execution, and a django-mcp-server adapter are implemented.
-- Cumulative budgets and audit logging are not implemented yet.
+Read policies, trusted Django request context, scoped QuerySets, the
+django-mcp-server adapter, cumulative export budgets, and privacy-safe audit
+metadata are implemented. The repository is release-ready; publishing still
+requires a dedicated release PR, GitHub Release, and Trusted Publishing.
 
 ## Topics
 
 | Document | Status |
 | --- | --- |
-| [Policy reference](policy-reference.md) | Milestone 1 |
-| [Stable error codes](error-codes.md) | Milestone 1 |
-| [Adapter support matrix](adapter-support.md) | Milestone 3 |
-| Threat model and residual risks | Milestone 4 |
-| Example application walkthrough | Milestone 2–3 |
+| [Policy reference](policy-reference.md) | Implemented |
+| [Stable error codes](error-codes.md) | Implemented |
+| [Adapter support matrix](adapter-support.md) | Implemented |
+| [Threat model and residual risks](threat-model.md) | Implemented |
+| [Release publishing](release.md) | Implemented |
+| [Example application walkthrough](../example_project/README.md) | Implemented |

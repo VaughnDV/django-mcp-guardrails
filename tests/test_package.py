@@ -16,6 +16,11 @@ import django_mcp_guardrails
 from django_mcp_guardrails.registry import get_registry
 
 
+def test_changelog_keeps_unreleased_until_a_release() -> None:
+    changelog = Path(__file__).resolve().parents[1] / "CHANGELOG.md"
+    assert "## [Unreleased]" in changelog.read_text(encoding="utf-8")
+
+
 def test_version_matches_package_metadata() -> None:
     assert django_mcp_guardrails.__version__ == metadata.version(
         "django-mcp-guardrails"

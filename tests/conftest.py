@@ -6,6 +6,12 @@ import pytest
 from django.core.management import call_command
 from django.test import RequestFactory
 
+from django_mcp_guardrails.audit import reset_audit_backend
+from django_mcp_guardrails.budgets import (
+    MemoryBudgetBackend,
+    reset_budgets,
+    set_budget_backend,
+)
 from django_mcp_guardrails.policies import ModelReadPolicy
 from django_mcp_guardrails.registry import reset_registry
 
@@ -17,10 +23,15 @@ def _create_testapp_tables(django_db_setup, django_db_blocker):
 
 
 @pytest.fixture(autouse=True)
-def _reset_policy_registry() -> None:
+def _reset_guardrail_runtime() -> None:
     reset_registry()
+    set_budget_backend(MemoryBudgetBackend())
+    reset_budgets()
+    reset_audit_backend()
     yield
     reset_registry()
+    reset_budgets()
+    reset_audit_backend()
 
 
 @pytest.fixture
@@ -45,4 +56,5 @@ def read_policy() -> ModelReadPolicy:
         default_limit=25,
         max_limit=100,
         max_session_rows=500,
+        max_pages=10,
     )

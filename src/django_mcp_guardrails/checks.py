@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 
 from django.apps import AppConfig
+from django.conf import settings
 from django.core.checks import CheckMessage, Error, Tags, Warning, register
 
 from django_mcp_guardrails.policies import ModelReadPolicy, WritePolicy
@@ -33,6 +34,14 @@ def check_policies(
 ) -> list[CheckMessage]:
     """Inspect registered policies. Does not query the database."""
     messages: list[CheckMessage] = []
+    if getattr(settings, "MCP_GUARDRAILS_AUDIT_STORE_PAYLOADS", False):
+        messages.append(
+            Error(
+                "Audit configuration stores payloads.",
+                hint="Disable MCP_GUARDRAILS_AUDIT_STORE_PAYLOADS; record metadata only.",
+                id="django_mcp_guardrails.E006",
+            )
+        )
     registry = get_registry()
     if len(registry) == 0:
         messages.append(
@@ -48,6 +57,7 @@ def check_policies(
                 Error(
                     f"Write policy {name!r} is not allowed in this version.",
                     id="django_mcp_guardrails.E001",
+                    obj=name,
                 )
             )
             continue
@@ -65,6 +75,7 @@ def _check_model_read_policy(name: str, policy: ModelReadPolicy) -> list[CheckMe
                 f"Policy {name!r} has an empty return_fields allowlist.",
                 hint="An empty allowlist grants no fields. Declare explicit output fields.",
                 id="django_mcp_guardrails.E002",
+                obj=name,
             )
         )
     if policy.max_limit > _MAX_SAFE_LIMIT:
@@ -73,6 +84,7 @@ def _check_model_read_policy(name: str, policy: ModelReadPolicy) -> list[CheckMe
                 f"Policy {name!r} has an unbounded max_limit.",
                 hint=f"Keep max_limit at {_MAX_SAFE_LIMIT} or below unless a dedicated export channel exists.",
                 id="django_mcp_guardrails.E003",
+                obj=name,
             )
         )
     if policy.max_relation_depth > _MAX_SAFE_RELATION_DEPTH:
@@ -80,6 +92,7 @@ def _check_model_read_policy(name: str, policy: ModelReadPolicy) -> list[CheckMe
             Error(
                 f"Policy {name!r} allows unrestricted relation traversal.",
                 id="django_mcp_guardrails.E004",
+                obj=name,
             )
         )
     if policy.queryset is None:
@@ -88,6 +101,7 @@ def _check_model_read_policy(name: str, policy: ModelReadPolicy) -> list[CheckMe
                 f"Policy {name!r} has no scoped queryset callable.",
                 hint="Provide a queryset factory that applies tenant scope first.",
                 id="django_mcp_guardrails.W002",
+                obj=name,
             )
         )
     sensitive = sorted(
@@ -101,6 +115,7 @@ def _check_model_read_policy(name: str, policy: ModelReadPolicy) -> list[CheckMe
                 f"Policy {name!r} allowlists sensitive field types.",
                 hint="Remove secret, token, and password fields from return_fields.",
                 id="django_mcp_guardrails.E005",
+                obj=name,
             )
         )
     return messages

@@ -72,3 +72,22 @@ def test_unauthenticated_producer_is_not_called(read_policy: ModelReadPolicy) ->
     with pytest.raises(GuardrailError) as exc_info:
         run_guarded_read(read_policy, PolicyContext.anonymous(), {}, producer)
     assert exc_info.value.code is ErrorCode.UNAUTHENTICATED
+
+
+def test_repeated_pagination_cannot_exceed_session_budget() -> None:
+    policy = ModelReadPolicy(
+        return_fields={"id"},
+        max_limit=25,
+        default_limit=25,
+        max_session_rows=40,
+        max_pages=10,
+    )
+
+    def producer(_context: PolicyContext, _query: object) -> list[dict[str, int]]:
+        return [{"id": index} for index in range(25)]
+
+    context = PolicyContext.authenticated("user-1")
+    run_guarded_read(policy, context, {"page": 1}, producer, tool_name="export")
+    with pytest.raises(GuardrailError) as exc_info:
+        run_guarded_read(policy, context, {"page": 2}, producer, tool_name="export")
+    assert exc_info.value.code is ErrorCode.SESSION_BUDGET_EXCEEDED

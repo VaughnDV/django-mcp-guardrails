@@ -14,9 +14,10 @@ Django permissions + scoped QuerySets
 sanitized, bounded, typed tool result
 ```
 
-Status: **alpha**. Read policies, Django QuerySet integration, and the
-django-mcp-server adapter are implemented. Cumulative budgets and audit
-logging are not implemented yet.
+Status: **alpha**. Deny-by-default read policies, Django QuerySet integration,
+the django-mcp-server adapter, cumulative export budgets, and privacy-safe
+audit metadata are implemented. Publishing to PyPI still requires a dedicated
+GitHub Release; see [docs/release.md](docs/release.md).
 
 ## Requirements
 
@@ -29,13 +30,17 @@ logging are not implemented yet.
 pip install django-mcp-guardrails
 ```
 
-Optional extras (declared now, used by later milestones):
+Optional extras:
 
 ```bash
 pip install "django-mcp-guardrails[django-mcp-server]"
 pip install "django-mcp-guardrails[mcp-sdk]"
 pip install "django-mcp-guardrails[audit]"
 ```
+
+The `audit` extra currently adds no extra dependencies. The optional
+`AuditEvent` model ships with the Django app; enable it with
+`DatabaseAuditBackend` after migrating.
 
 Add the app to `INSTALLED_APPS`:
 
@@ -58,12 +63,16 @@ policy = ModelReadPolicy(
     ordering_fields={"name"},
     default_limit=25,
     max_limit=100,
+    max_session_rows=500,
+    max_pages=10,
 )
+
 
 @guarded_tool(policy=policy, risk="read")
 def search_sponsors(context: PolicyContext, query):
     # Return already-serialized mappings. QuerySets are rejected.
     return [{"id": 1, "name": "Acme", "password": "stripped"}]
+
 
 result = search_sponsors(
     PolicyContext.authenticated("user-1"),
@@ -102,6 +111,8 @@ Write tools stay disabled or experimental until the specification promotes them.
 
 - [Policy reference](docs/policy-reference.md)
 - [Adapter support matrix](docs/adapter-support.md)
+- [Threat model](docs/threat-model.md)
+- [Release publishing](docs/release.md)
 - [Project specification](PROJECT_SPEC.md)
 - [Contributor guide](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)

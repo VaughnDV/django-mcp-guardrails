@@ -1,7 +1,7 @@
 # Policy reference
 
-Status: implemented through Django QuerySet integration (Milestone 2). MCP
-adapters, cumulative budgets, and audit persistence are not implemented here.
+Status: implemented through Milestone 4 (read policies, Django QuerySets,
+django-mcp-server adapter, cumulative budgets, and privacy-safe audit).
 
 ## Deny by default
 
@@ -37,6 +37,8 @@ policy = ModelReadPolicy(
     lookups={"name": {"exact", "icontains"}, "status": {"exact", "in"}},
     default_limit=25,
     max_limit=100,
+    max_session_rows=500,
+    max_pages=10,
 )
 
 
@@ -88,15 +90,62 @@ even if allowlisted.
     "policy_version": "2026-08-01",
     "export_policy": {
       "bulk_export_supported": false,
-      "max_rows_per_call": 100
+      "max_rows_per_call": 100,
+      "max_session_rows": 500
     }
   }
 }
 ```
 
 Row and serialized-byte limits cannot be raised by client arguments.
-Cumulative session budgets are declared on the policy (`max_session_rows`)
-but not yet enforced across calls.
+
+## Budgets
+
+Per-call `limit` / `max_limit` and `max_serialized_bytes` are enforced on the
+actual sanitized result. Optional cumulative controls:
+
+- `max_session_rows` — total rows returned for the same user, client, tool, and
+  filter digest in an hourly window
+- `max_pages` — maximum page number and distinct pages for that same key
+
+Page walking uses a digest that **omits** `page`, so changing page does not
+reset the row budget. Filter values are hashed into that digest and are not
+stored. Keys come from trusted `PolicyContext` identity, never from tool
+arguments.
+
+The default backend is in-process memory. Multi-process deployments should
+install a Django cache backend:
+
+```python
+from django_mcp_guardrails.budgets import CacheBudgetBackend, set_budget_backend
+
+set_budget_backend(CacheBudgetBackend())
+```
+
+Hourly windows reset counters; they do not prevent reconstruction across hours
+or clients. See [the threat model](threat-model.md).
+
+## Audit
+
+Successful and denied reads emit metadata: identities, policy version, filter
+field names, a request digest, counts, serialized size, duration, truncation,
+and decision. Prompts, results, and secret values are not recorded.
+
+```python
+from django_mcp_guardrails.audit import DatabaseAuditBackend, set_audit_backend
+
+set_audit_backend(DatabaseAuditBackend())
+```
+
+Read-tool audit failures fail open unless `fail_closed=True`. Required write
+audits fail closed. Do not set `MCP_GUARDRAILS_AUDIT_STORE_PAYLOADS`.
+
+## Commands
+
+- `mcp_guardrails_inventory` — list guarded tools, risk, fields, and limits
+- `mcp_guardrails_check [--baseline baseline.json]` — fail CI on new errors
+- `mcp_guardrails_simulate tool_name '{...}'` — validate a query without
+  running the queryset
 
 ## Write policies
 

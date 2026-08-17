@@ -1,0 +1,104 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and inspect
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v10
+        with:
+          python-version: "3.11"
+          enable-cache: true
+      - name: Install Poetry
+        run: uv tool install poetry==2.4.1
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-ansi
+      - name: Build
+        run: poetry build
+      - name: Check metadata
+        run: poetry run twine check dist/*
+      - name: Verify tag, metadata, and changelog
+        run: |
+          python - <<'PY'
+          import os
+          import re
+          import tomllib
+          from pathlib import Path
+
+          version = tomllib.loads(Path("pyproject.toml").read_text())["project"]["version"]
+          tag = os.environ["GITHUB_REF_NAME"]
+          if tag != f"v{version}":
+              raise SystemExit(f"tag {tag} does not match metadata version {version}")
+          changelog = Path("CHANGELOG.md").read_text()
+          if not re.search(rf"^## \[{re.escape(version)}\]", changelog, re.M):
+              raise SystemExit(f"CHANGELOG.md missing heading ## [{version}]")
+          print(f"release identity ok: {tag}")
+          PY
+      - name: Inspect artifacts
+        run: |
+          python - <<'PY'
+          import tarfile
+          import zipfile
+          from pathlib import Path
+
+          dist = Path("dist")
+          wheels = list(dist.glob("*.whl"))
+          sdists = list(dist.glob("*.tar.gz"))
+          if len(wheels) != 1 or len(sdists) != 1:
+              raise SystemExit(f"expected one wheel and one sdist, found {wheels} {sdists}")
+          with zipfile.ZipFile(wheels[0]) as archive:
+              names = archive.namelist()
+          if not any("django_mcp_guardrails/migrations/0001" in name for name in names):
+              raise SystemExit("wheel is missing audit migrations")
+          blocked = [name for name in names if name.endswith(".env") or ".venv/" in name]
+          if blocked:
+              raise SystemExit(f"artifact contains blocked paths: {blocked}")
+          with tarfile.open(sdists[0], "r:gz") as archive:
+              tar_names = archive.getnames()
+          if not any(name.endswith("LICENSE") for name in names + tar_names):
+              raise SystemExit("LICENSE missing from artifacts")
+          print("artifact inspection ok")
+          PY
+      - name: Clean-install wheel and smoke import
+        run: |
+          uv venv .smoke --python 3.11
+          .smoke/bin/python -m pip install dist/*.whl
+          .smoke/bin/python - <<'PY'
+          import django_mcp_guardrails
+          import django_mcp_guardrails.adapters.django_mcp_server as adapter
+          import tomllib
+          from pathlib import Path
+
+          version = tomllib.loads(Path("pyproject.toml").read_text())["project"]["version"]
+          if django_mcp_guardrails.__version__ != version:
+              raise SystemExit("installed version drifted from metadata")
+          print(adapter.__name__, django_mcp_guardrails.__version__)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+  publish:
+    name: Publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/django-mcp-guardrails
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2

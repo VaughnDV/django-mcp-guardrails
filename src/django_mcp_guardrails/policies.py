@@ -166,6 +166,7 @@ class ModelReadPolicy:
     risk: RiskLevel = RiskLevel.READ
     version: str = DEFAULT_POLICY_VERSION
     enabled: bool = True
+    audit: bool = True
     object_permission: Callable[..., bool] | None = None
     search_handler: Callable[..., Any] | None = None
 

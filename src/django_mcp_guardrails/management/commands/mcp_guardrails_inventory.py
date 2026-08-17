@@ -47,6 +47,9 @@ def _describe(name: str, policy: object) -> dict[str, object]:
         "enabled": getattr(policy, "enabled", False),
         "return_fields": sorted(getattr(policy, "return_fields", ())),
         "max_limit": getattr(policy, "max_limit", None),
+        "max_session_rows": getattr(policy, "max_session_rows", None),
+        "max_pages": getattr(policy, "max_pages", None),
+        "audit": getattr(policy, "audit", True),
         "authentication": "trusted_request_context",
     }
     if isinstance(policy, ModelReadPolicy):

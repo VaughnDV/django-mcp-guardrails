@@ -1,6 +1,7 @@
 # Adapter support matrix
 
-Status: django-mcp-server adapter implemented (Milestone 3).
+Status: django-mcp-server adapter implemented. Cumulative budgets and audit
+apply in the policy core used by this adapter.
 
 | Extra | Framework | Supported versions | Notes |
 | --- | --- | --- | --- |

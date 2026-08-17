@@ -65,3 +65,15 @@ Read [`PROJECT_SPEC.md`](PROJECT_SPEC.md) and the Cursor rules in `.cursor/rules
 - Add or update tests with behavior changes.
 - Update the changelog under `## [Unreleased]`.
 - Do not weaken deny-by-default rules to make a test pass.
+
+## Releases
+
+Do not publish from a coding agent unless a maintainer explicitly asks.
+
+Ordinary CI on push and pull request never publishes. Production publishing is
+[`.github/workflows/release.yml`](.github/workflows/release.yml), triggered
+only by `release: types: [published]`. TestPyPI is a separately gated
+`workflow_dispatch` workflow that requires a PEP 440 pre-release.
+
+See [`docs/release.md`](docs/release.md) for Trusted Publishing, GitHub
+environments, and the maintainer release checklist.

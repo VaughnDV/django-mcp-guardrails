@@ -27,7 +27,7 @@ You should receive an acknowledgement within 7 days. We will coordinate a fix an
 - Act as a general data-loss-prevention product
 - Implement MCP transports or an OAuth server
 
-Please still report issues that would let a client bypass allowlists, tenant scope, output sanitization, or export limits once those features exist.
+Please still report issues that would let a client bypass allowlists, tenant scope, output sanitization, or export limits.
 
 ## Secrets and audit data
 

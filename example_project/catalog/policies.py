@@ -20,6 +20,8 @@ item_read_policy = ModelReadPolicy(
     lookups={"name": {"exact", "icontains"}, "status": {"exact", "in"}},
     default_limit=25,
     max_limit=100,
+    max_session_rows=500,
+    max_pages=10,
 )
 
 

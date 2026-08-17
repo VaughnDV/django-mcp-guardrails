@@ -1,0 +1,61 @@
+name: Publish to TestPyPI
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build pre-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v10
+        with:
+          python-version: "3.11"
+          enable-cache: true
+      - name: Install Poetry
+        run: uv tool install poetry==2.4.1
+      - name: Require a PEP 440 pre-release
+        run: |
+          python - <<'PY'
+          import tomllib
+          from pathlib import Path
+
+          version = tomllib.loads(Path("pyproject.toml").read_text())["project"]["version"]
+          if not any(marker in version for marker in ("a", "b", "rc", "dev")):
+              raise SystemExit(
+                  "TestPyPI publishes require a PEP 440 pre-release such as 0.1.0rc1"
+              )
+          print(f"pre-release identity ok: {version}")
+          PY
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-ansi
+      - name: Build
+        run: poetry build
+      - name: Check metadata
+        run: poetry run twine check dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+  publish:
+    name: Publish to TestPyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/django-mcp-guardrails
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        with:
+          repository-url: https://test.pypi.org/legacy/
