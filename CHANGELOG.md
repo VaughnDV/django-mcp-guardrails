@@ -20,4 +20,5 @@ release has been published.
 - `guarded_tool` decorator and in-memory policy registry.
 - Django QuerySet integration with trusted `PolicyContext.from_request`,
   tenant-scoped querysets, object-permission callbacks, system checks, and
-  `mcp_guardrails_inventory` / `mcp_guardrails_check` commands.
+- django-mcp-server adapter that translates framework request context into
+  the policy core, plus a reusable adapter contract suite.

@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import os
+import subprocess
 import sys
 from importlib import metadata
 from io import StringIO
+from pathlib import Path
 
 from django.apps import apps
 from django.core.management import call_command
@@ -31,9 +34,22 @@ def test_import_does_not_register_policies() -> None:
     assert len(get_registry()) == 0
 
 
-def test_core_does_not_import_optional_frameworks() -> None:
-    imported = {"mcp", "django_mcp_server"} & set(sys.modules)
-    assert not imported
+def test_fresh_core_import_does_not_load_mcp_frameworks() -> None:
+    root = Path(__file__).resolve().parents[1]
+    code = (
+        "import sys; import django_mcp_guardrails; "
+        "import django_mcp_guardrails.adapters.django_mcp_server; "
+        "raise SystemExit(1 if {'mcp_server'} & set(sys.modules) else 0)"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        check=False,
+        env={
+            **os.environ,
+            "PYTHONPATH": os.pathsep.join([str(root / "src"), str(root)]),
+        },
+    )
+    assert result.returncode == 0
 
 
 def test_optional_adapter_modules_import_without_extras() -> None:

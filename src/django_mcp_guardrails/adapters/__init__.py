@@ -3,3 +3,5 @@
 Adapter modules must keep optional framework imports isolated so the core
 package remains installable without extras.
 """
+
+from __future__ import annotations

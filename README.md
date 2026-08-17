@@ -14,9 +14,9 @@ Django permissions + scoped QuerySets
 sanitized, bounded, typed tool result
 ```
 
-Status: **alpha**. The read policy core and Django QuerySet integration are
-implemented. MCP adapters, cumulative budgets, and audit logging are not
-implemented yet.
+Status: **alpha**. Read policies, Django QuerySet integration, and the
+django-mcp-server adapter are implemented. Cumulative budgets and audit
+logging are not implemented yet.
 
 ## Requirements
 
@@ -101,7 +101,7 @@ Write tools stay disabled or experimental until the specification promotes them.
 ## Documentation
 
 - [Policy reference](docs/policy-reference.md)
-- [Stable error codes](docs/error-codes.md)
+- [Adapter support matrix](docs/adapter-support.md)
 - [Project specification](PROJECT_SPEC.md)
 - [Contributor guide](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)

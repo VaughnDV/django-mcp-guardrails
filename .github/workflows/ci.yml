@@ -51,7 +51,7 @@ jobs:
       - name: Install Poetry
         run: uv tool install poetry==2.4.1
       - name: Install dependencies
-        run: poetry install --no-interaction --no-ansi
+        run: poetry install --no-interaction --no-ansi --extras django-mcp-server
       - name: Install Django ${{ matrix.django-version }}
         run: poetry run pip install "django==${{ matrix.django-version }}.*"
       - name: Run tests

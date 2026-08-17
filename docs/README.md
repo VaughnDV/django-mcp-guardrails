@@ -6,9 +6,9 @@ This directory will hold the policy reference, adapter support matrix, threat mo
 
 ## Current status
 
-- Framework-neutral read policy core, trusted Django request context, and
-  scoped QuerySet execution are implemented.
-- MCP adapters, cumulative budgets, and audit logging are not implemented yet.
+- Framework-neutral read policy core, trusted Django request context, scoped
+  QuerySet execution, and a django-mcp-server adapter are implemented.
+- Cumulative budgets and audit logging are not implemented yet.
 
 ## Topics
 
@@ -16,6 +16,6 @@ This directory will hold the policy reference, adapter support matrix, threat mo
 | --- | --- |
 | [Policy reference](policy-reference.md) | Milestone 1 |
 | [Stable error codes](error-codes.md) | Milestone 1 |
-| Adapter support matrix | Milestone 3 |
+| [Adapter support matrix](adapter-support.md) | Milestone 3 |
 | Threat model and residual risks | Milestone 4 |
 | Example application walkthrough | Milestone 2–3 |

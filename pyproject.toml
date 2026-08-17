@@ -48,6 +48,7 @@ dependencies = [
 [project.optional-dependencies]
 django-mcp-server = [
     "django-mcp-server (>=0.5.7)",
+    "mcp (>=1.8.0,<2.0.0)",
 ]
 mcp-sdk = [
     "mcp (>=1.0)",
@@ -125,6 +126,10 @@ addopts = [
 ]
 filterwarnings = [
     "error",
+    "ignore::pydantic_settings.exceptions.IncompleteFieldDefinitionWarning",
+]
+markers = [
+    "adapter: tests that require an optional MCP framework extra",
 ]
 
 [tool.coverage.run]
@@ -149,3 +154,12 @@ show_error_codes = true
 
 [tool.django-stubs]
 django_settings_module = "tests.settings"
+
+[[tool.mypy.overrides]]
+module = [
+    "mcp",
+    "mcp.*",
+    "mcp_server",
+    "mcp_server.*",
+]
+ignore_missing_imports = true

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import pytest
 from django.core.management import call_command
+from django.test import RequestFactory
 
 from django_mcp_guardrails.policies import ModelReadPolicy
 from django_mcp_guardrails.registry import reset_registry
@@ -20,6 +21,11 @@ def _reset_policy_registry() -> None:
     reset_registry()
     yield
     reset_registry()
+
+
+@pytest.fixture
+def factory() -> RequestFactory:
+    return RequestFactory()
 
 
 @pytest.fixture

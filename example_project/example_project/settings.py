@@ -31,6 +31,13 @@ INSTALLED_APPS = [
     "catalog",
 ]
 
+try:
+    import mcp_server  # noqa: F401
+
+    INSTALLED_APPS.append("mcp_server")
+except ImportError:
+    pass
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
