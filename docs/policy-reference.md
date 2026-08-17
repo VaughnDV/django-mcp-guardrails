@@ -1,8 +1,7 @@
 # Policy reference
 
-Status: implemented for the framework-neutral read core (Milestone 1). Django
-QuerySet execution, MCP adapters, cumulative budgets, and audit persistence
-are not implemented here.
+Status: implemented through Django QuerySet integration (Milestone 2). MCP
+adapters, cumulative budgets, and audit persistence are not implemented here.
 
 ## Deny by default
 
@@ -14,15 +13,22 @@ are not implemented here.
 
 ## `ModelReadPolicy`
 
-Declare an explicit allowlist for a read-only model surface. The `queryset`
-callable is stored for later Django integration and is not invoked by the
-core.
+Declare an explicit allowlist for a read-only model surface. Provide a
+queryset factory that applies tenant scope **before** client filters.
 
 ```python
-from django_mcp_guardrails import ModelReadPolicy, PolicyContext, guarded_tool
+from django_mcp_guardrails import (
+    ModelReadPolicy,
+    PolicyContext,
+    execute_model_read,
+    guarded_tool,
+)
 
 policy = ModelReadPolicy(
-    model="Sponsor",
+    model=Item,
+    queryset=lambda request: Item.objects.filter(
+        organization_id=request.organization_id
+    ),
     return_fields={"id", "name", "industry"},
     filter_fields={"name", "industry", "status"},
     ordering_fields={"name", "date_added"},
@@ -33,9 +39,17 @@ policy = ModelReadPolicy(
     max_limit=100,
 )
 
+
 @guarded_tool(policy=policy, risk="read")
-def search_sponsors(context: PolicyContext, query):
-    return [{"id": 1, "name": "Acme", "password": "ignored"}]
+def search_items(context: PolicyContext, query):
+    return []  # unused when queryset is set
+
+
+context = PolicyContext.from_request(
+    request,
+    get_organization_id=lambda req: getattr(req, "organization_id", None),
+)
+result = execute_model_read(policy, context, {"filters": {"name": "Acme"}})
 ```
 
 `PolicyContext` must be built from trusted server state. Tool arguments that

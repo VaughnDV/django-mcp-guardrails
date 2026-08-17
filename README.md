@@ -14,9 +14,9 @@ Django permissions + scoped QuerySets
 sanitized, bounded, typed tool result
 ```
 
-Status: **alpha**. The framework-neutral read policy core is implemented.
-Django QuerySet execution, MCP adapters, cumulative budgets, and audit
-logging are not implemented yet.
+Status: **alpha**. The read policy core and Django QuerySet integration are
+implemented. MCP adapters, cumulative budgets, and audit logging are not
+implemented yet.
 
 ## Requirements
 

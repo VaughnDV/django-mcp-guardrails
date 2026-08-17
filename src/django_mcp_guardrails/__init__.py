@@ -6,7 +6,11 @@ from importlib.metadata import PackageNotFoundError, version
 
 from django_mcp_guardrails.context import PolicyContext
 from django_mcp_guardrails.decorators import guarded_tool
-from django_mcp_guardrails.engine import execute_guarded, run_guarded_read
+from django_mcp_guardrails.engine import (
+    execute_guarded,
+    execute_model_read,
+    run_guarded_read,
+)
 from django_mcp_guardrails.errors import ErrorCode, GuardrailError
 from django_mcp_guardrails.outputs import ResultEnvelope, sanitize_output
 from django_mcp_guardrails.policies import (
@@ -38,6 +42,7 @@ __all__ = [
     "WritePolicy",
     "__version__",
     "execute_guarded",
+    "execute_model_read",
     "generate_input_schema",
     "generate_output_schema",
     "get_registry",

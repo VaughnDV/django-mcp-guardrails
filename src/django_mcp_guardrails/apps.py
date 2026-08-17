@@ -13,9 +13,7 @@ class DjangoMCPGuardrailsConfig(AppConfig):
     verbose_name = "Django MCP Guardrails"
 
     def ready(self) -> None:
-        """Defer side effects until Django is ready.
+        """Register system checks. Do not query the database here."""
+        from django_mcp_guardrails.checks import register_checks
 
-        System checks and policy registration will be wired here in later
-        milestones. This method must stay free of database queries, network
-        clients, and settings access that is not yet available.
-        """
+        register_checks()

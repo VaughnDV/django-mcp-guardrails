@@ -6,10 +6,9 @@ This directory will hold the policy reference, adapter support matrix, threat mo
 
 ## Current status
 
-- Framework-neutral read policy core, query validation, and output sanitization
-  are implemented.
-- Django QuerySet integration, MCP adapters, budgets, and audit logging are not
-  implemented yet.
+- Framework-neutral read policy core, trusted Django request context, and
+  scoped QuerySet execution are implemented.
+- MCP adapters, cumulative budgets, and audit logging are not implemented yet.
 
 ## Topics
 

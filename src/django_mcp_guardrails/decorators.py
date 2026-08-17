@@ -9,8 +9,14 @@ from typing import Any, TypeVar, cast
 from django_mcp_guardrails.context import PolicyContext
 from django_mcp_guardrails.engine import run_guarded_read
 from django_mcp_guardrails.errors import ErrorCode, safe_error
+from django_mcp_guardrails.orm import fetch_serialized_rows
 from django_mcp_guardrails.outputs import ResultEnvelope
-from django_mcp_guardrails.policies import Policy, RiskLevel, WritePolicy
+from django_mcp_guardrails.policies import (
+    ModelReadPolicy,
+    Policy,
+    RiskLevel,
+    WritePolicy,
+)
 from django_mcp_guardrails.queries import NormalizedQuery
 from django_mcp_guardrails.registry import PolicyRegistry, get_registry
 
@@ -52,6 +58,8 @@ def guarded_tool(
             def producer(
                 trusted_context: PolicyContext, normalized: NormalizedQuery
             ) -> object:
+                if isinstance(policy, ModelReadPolicy) and policy.queryset is not None:
+                    return fetch_serialized_rows(policy, trusted_context, normalized)
                 return fn(trusted_context, normalized, *args, **kwargs)
 
             return run_guarded_read(policy, context, query, producer)

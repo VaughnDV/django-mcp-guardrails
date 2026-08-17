@@ -18,4 +18,6 @@ release has been published.
 - Framework-neutral deny-by-default read policies, query validation, output
   allowlisting, result envelopes, and stable error codes.
 - `guarded_tool` decorator and in-memory policy registry.
-- Policy reference and error-code documentation.
+- Django QuerySet integration with trusted `PolicyContext.from_request`,
+  tenant-scoped querysets, object-permission callbacks, system checks, and
+  `mcp_guardrails_inventory` / `mcp_guardrails_check` commands.

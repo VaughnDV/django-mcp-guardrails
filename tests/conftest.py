@@ -3,9 +3,16 @@
 from __future__ import annotations
 
 import pytest
+from django.core.management import call_command
 
 from django_mcp_guardrails.policies import ModelReadPolicy
 from django_mcp_guardrails.registry import reset_registry
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _create_testapp_tables(django_db_setup, django_db_blocker):
+    with django_db_blocker.unblock():
+        call_command("migrate", run_syncdb=True, verbosity=0)
 
 
 @pytest.fixture(autouse=True)

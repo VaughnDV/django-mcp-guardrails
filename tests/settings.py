@@ -11,6 +11,7 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django_mcp_guardrails",
+    "tests.testapp",
 ]
 
 DATABASES = {

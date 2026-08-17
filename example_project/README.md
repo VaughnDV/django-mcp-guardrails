@@ -2,7 +2,17 @@
 
 This directory is a **consumer** of `django-mcp-guardrails`, not a second package.
 
-It exists so later milestones can demonstrate authenticated request context, explicit read policies, and a real MCP adapter without inventing a transport.
+It demonstrates authenticated request context, an explicit tenant-scoped
+read policy, and (later) a real MCP adapter without inventing a transport.
+
+Create a user, an organization, and catalog items in Django admin after
+migrate. The `OrganizationContextMiddleware` attaches `request.organization_id`
+from the signed-in user's memberships—never from query parameters.
+
+```bash
+poetry run python example_project/manage.py mcp_guardrails_inventory
+poetry run python example_project/manage.py mcp_guardrails_check
+```
 
 ## Run locally
 

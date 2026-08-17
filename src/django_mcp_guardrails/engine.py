@@ -7,8 +7,10 @@ from typing import Any
 
 from django_mcp_guardrails.context import PolicyContext
 from django_mcp_guardrails.errors import ErrorCode, GuardrailError, safe_error
+from django_mcp_guardrails.orm import fetch_serialized_rows
 from django_mcp_guardrails.outputs import ResultEnvelope, sanitize_output
 from django_mcp_guardrails.policies import (
+    ModelReadPolicy,
     Policy,
     RiskLevel,
     WritePolicy,
@@ -31,6 +33,20 @@ def execute_guarded(
     active_registry = registry if registry is not None else get_registry()
     policy = active_registry.get(name)
     return run_guarded_read(policy, context, raw_query, producer)
+
+
+def execute_model_read(
+    policy: ModelReadPolicy,
+    context: PolicyContext,
+    raw_query: Mapping[str, Any] | NormalizedQuery | None,
+) -> ResultEnvelope:
+    """Apply a model read policy to a scoped QuerySet and sanitize the result."""
+    return run_guarded_read(
+        policy,
+        context,
+        raw_query,
+        lambda trusted, normalized: fetch_serialized_rows(policy, trusted, normalized),
+    )
 
 
 def run_guarded_read(
