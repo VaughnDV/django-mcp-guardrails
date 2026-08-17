@@ -120,14 +120,18 @@ DJANGO_SETTINGS_MODULE = "tests.settings"
 pythonpath = ["src", "."]
 testpaths = ["tests"]
 addopts = [
+    "-p",
+    "pytest_cov",
+    "--cov",
+    "--cov-config=pyproject.toml",
+    "--cov-report=term-missing",
     "--strict-config",
     "--strict-markers",
-    "--cov=django_mcp_guardrails",
-    "--cov-report=term-missing",
 ]
 filterwarnings = [
     "error",
     "ignore::pydantic_settings.exceptions.IncompleteFieldDefinitionWarning",
+    "ignore:Module django_mcp_guardrails was previously imported:coverage.exceptions.CoverageWarning",
 ]
 markers = [
     "adapter: tests that require an optional MCP framework extra",
@@ -135,8 +139,20 @@ markers = [
 
 [tool.coverage.run]
 branch = true
-source = ["django_mcp_guardrails"]
-omit = ["*/migrations/*"]
+source_pkgs = ["django_mcp_guardrails"]
+omit = [
+    "*/migrations/*",
+    "*/.venv/*",
+    "*/site-packages/*",
+    "*/tests/*",
+    "*/example_project/*",
+]
+
+[tool.coverage.paths]
+source = [
+    "src/django_mcp_guardrails",
+    "*/site-packages/django_mcp_guardrails",
+]
 
 [tool.coverage.report]
 show_missing = true
@@ -162,5 +178,7 @@ module = [
     "mcp.*",
     "mcp_server",
     "mcp_server.*",
+    "pydantic_settings",
+    "pydantic_settings.*",
 ]
 ignore_missing_imports = true

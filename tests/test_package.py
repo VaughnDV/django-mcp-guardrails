@@ -9,6 +9,7 @@ from importlib import metadata
 from io import StringIO
 from pathlib import Path
 
+import pytest
 from django.apps import apps
 from django.core.management import call_command
 
@@ -71,5 +72,6 @@ def test_app_config_is_installed() -> None:
     assert apps.is_installed("django_mcp_guardrails")
 
 
+@pytest.mark.django_db
 def test_django_system_checks_pass() -> None:
     call_command("check", stdout=StringIO())
