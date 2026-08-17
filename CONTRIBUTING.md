@@ -42,6 +42,10 @@ poetry build
 poetry run twine check dist/*
 ```
 
+Run these from the repository root. `pytest` is configured to measure only
+`django_mcp_guardrails` (not `.venv` or site-packages) and to fail below 80%
+coverage.
+
 `pre-commit` runs Ruff, formatting, Poetry metadata checks, and secret/file hygiene on commit:
 
 ```bash
@@ -52,7 +56,7 @@ Unit tests use `tests.settings`. They must not require secrets, network access, 
 
 ## Design rules
 
-Read [`PROJECT_SPEC.md`](PROJECT_SPEC.md) and the Cursor rules in `.cursor/rules/` before changing policy, adapters, query vocabulary, audit behavior, or public APIs.
+Read the published policy reference, adapter support matrix, and threat model before changing policy, adapters, query vocabulary, audit behavior, or public APIs.
 
 - Keep the policy core framework-neutral.
 - Adapters translate inputs and outputs; they do not redefine policy semantics.

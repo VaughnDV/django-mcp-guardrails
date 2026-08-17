@@ -113,7 +113,6 @@ Write tools stay disabled or experimental until the specification promotes them.
 - [Adapter support matrix](docs/adapter-support.md)
 - [Threat model](docs/threat-model.md)
 - [Release publishing](docs/release.md)
-- [Project specification](PROJECT_SPEC.md)
 - [Contributor guide](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)
 - [Changelog](CHANGELOG.md)

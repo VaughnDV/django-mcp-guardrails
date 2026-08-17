@@ -8,6 +8,6 @@ labels: ["enhancement"]
 
 ## Proposed change
 
-Does this stay within the version 0.1 boundaries in `PROJECT_SPEC.md`?
+Does this stay within the version 0.1 boundaries in the policy reference?
 
 ## Alternatives

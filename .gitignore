@@ -1,4 +1,4 @@
-# Local kickstarts, scratch work, and generated reports
+# Local kickstarts, scratch work, generated reports, and uncommitted notes
 /.tmp/
 /tmp/
 *.tmp
@@ -66,10 +66,8 @@ local.env
 /secrets/
 /credentials/
 
-# Editors: commit Cursor rules, ignore other local Cursor state
-.cursor/*
-!.cursor/rules/
-!.cursor/rules/**
+# Editors
+.cursor/
 .idea/
 .vscode/
 *.swp

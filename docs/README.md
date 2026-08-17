@@ -1,6 +1,6 @@
 # Documentation
 
-The version 0.1 product contract lives in [`PROJECT_SPEC.md`](../PROJECT_SPEC.md). Treat that document as the source of truth for policy semantics, adapters, query vocabulary, audit behavior, and public APIs.
+The published contract lives in this directory: policy reference, adapter support, threat model, error codes, and release notes. Treat those documents as the source of truth for policy semantics, adapters, query vocabulary, audit behavior, and public APIs.
 
 ## Current status
 
