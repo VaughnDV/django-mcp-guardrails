@@ -48,7 +48,7 @@ dependencies = [
 [project.optional-dependencies]
 django-mcp-server = [
     "django-mcp-server (>=0.5.7)",
-    "mcp (>=1.8.0,<2.0.0)",
+    "mcp (>=1.30.0,<2.0.0)",
 ]
 mcp-sdk = [
     "mcp (>=1.0)",
