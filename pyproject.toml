@@ -75,7 +75,7 @@ pytest = ">=8.3"
 pytest-cov = ">=6.0"
 pytest-django = ">=4.10"
 python-dotenv = ">=1.0"
-ruff = ">=0.16"
+ruff = ">=0.16.7"
 twine = ">=6.0"
 
 [tool.ruff]
