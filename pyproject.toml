@@ -68,7 +68,7 @@ packages = [
 ]
 
 [tool.poetry.group.dev.dependencies]
-django-stubs = { version = ">=5.2", extras = ["compatible-mypy"] }
+django-stubs = { version = ">=6.1.2", extras = ["compatible-mypy"] }
 mypy = ">=1.13"
 pre-commit = ">=4.0"
 pytest = ">=8.3"
